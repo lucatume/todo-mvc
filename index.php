@@ -35,47 +35,12 @@
 <section class="todoapp">
 	<header class="header">
 		<h1>todos</h1>
-		<input class="new-todo" placeholder="What needs to be done?" autofocus="" ic-post-to="/tasks">
+		<input class="new-todo" placeholder="What needs to be done?" autofocus="" ic-post-to="/tasks" name="task-title"
+		       ic-target="#todo-list">
 	</header>
-	<section class="main">
-		<input class="toggle-all" type="checkbox">
-		<label for="toggle-all">Mark all as complete</label>
-		<ul class="todo-list">
-			<li>
-				<div class="view">
-					<input class="toggle" type="checkbox">
-					<label>Something</label>
-					<button class="destroy"></button>
-				</div>
-				<input class="edit" value="Something">
-			</li>
-			<li class="completed">
-				<div class="view">
-					<input class="toggle" type="checkbox" checked="">
-					<label>Something else</label>
-					<button class="destroy"></button>
-				</div>
-				<input class="edit" value="Something else">
-			</li>
-		</ul>
-	</section>
-	<footer class="footer">
-		<span class="todo-count"><strong>1</strong> item left</span>
-		<ul class="filters">
-			<li>
-				<a class="selected" href="#/">All</a>
-			</li>
-			<li>
-				<a href="#/active">Active</a>
-			</li>
-			<li>
-				<a href="#/completed">Completed</a>
-			</li>
-		</ul>
-
-		<button class="clear-completed">Clear completed</button>
-
-	</footer>
+	<div id="todo-list">
+		<?php todomvc_the_list() ?>
+	</div>
 </section>
 <footer class="info">
 	<p>Double-click to edit a todo</p>

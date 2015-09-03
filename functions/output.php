@@ -11,7 +11,7 @@ function todomvc_the_list( $status = [ 'active', 'completed' ] ) {
 		<label for="toggle-all">Mark all as complete</label>
 		<ul class="todo-list">
 			<?php foreach ( $todos as $todo ): ?>
-				<?php $status = $todo->post_status == 'active' ? '' : 'completed'; ?>
+				<?php $status = $todo->post_status == 'active' ? '' : 'class = "completed"'; ?>
 				<li <?php echo $status ?>>
 					<div class="view">
 						<input class="toggle" type="checkbox">

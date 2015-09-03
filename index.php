@@ -38,7 +38,7 @@
 		<input class="new-todo" placeholder="What needs to be done?" autofocus="" ic-post-to="/tasks" name="task-title"
 		       ic-target="#todo-list">
 	</header>
-	<div id="todo-list">
+	<div id="todo-list" <?php echo todomvc_get_display() ?>>
 		<?php todomvc_the_list() ?>
 	</div>
 </section>

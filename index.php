@@ -3,8 +3,6 @@
 	<meta charset="utf-8">
 	<title>intercooler.js + WP • TodoMVC</title>
 	<?php wp_head() ?>
-	<link rel="stylesheet" href="/assets/css/base.css">
-	<link rel="stylesheet" href="/assets/css/index.css">
 </head>
 <body class="learn-bar">
 <aside class="learn">
@@ -37,7 +35,7 @@
 <section class="todoapp">
 	<header class="header">
 		<h1>todos</h1>
-		<input class="new-todo" placeholder="What needs to be done?" autofocus="">
+		<input class="new-todo" placeholder="What needs to be done?" autofocus="" ic-post-to="/tasks">
 	</header>
 	<section class="main">
 		<input class="toggle-all" type="checkbox">
@@ -86,6 +84,7 @@
 
 	<p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
 </footer>
+<?php wp_footer() ?>
 </body>
 <div></div>
 </html>

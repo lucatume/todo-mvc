@@ -24,7 +24,7 @@ add_action( 'wp-routes/register_routes', function () {
 
 		$status = array_intersect( $_REQUEST['status'], [ 'active', 'completed' ] );
 
-		todomvc_the_list();
+		todomvc_the_list( $status );
 	} );
 
 	// Add a new todo

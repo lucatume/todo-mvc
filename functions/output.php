@@ -14,8 +14,9 @@ function todomvc_the_list( $status = [ 'active', 'completed' ] ) {
 				<li <?php echo $class ?>>
 					<div class="view">
 						<input class="toggle" type="checkbox"
-						       ic-put-to="/tasks/<?php echo $todo->ID ?>" <?php checked( 'completed', $todo->post_status ) ?>
-						       ic-target="#todo-list">
+						       ic-put-to="/tasks/<?php echo $todo->ID ?>"
+							<?php checked( 'completed', $todo->post_status ) ?>
+							   ic-target="#todo-list">
 						<label><?php echo $todo->post_title ?></label>
 						<button class="destroy" ic-delete-from="/tasks/<?php echo $todo->ID ?>"
 						        ic-target="#todo-list"></button>
@@ -57,7 +58,7 @@ function todomvc_the_list( $status = [ 'active', 'completed' ] ) {
 /**
  * @param $status
  */
-function todomvc_get_display( $status=['active','completed'] ) {
+function todomvc_get_display( $status = [ 'active', 'completed' ] ) {
 	$todos                                  = todomvc_get_todos( $status );
 	$all_completed                          = todomvc_get_all_completed( $todos );
 	$count                                  = count( $todos );

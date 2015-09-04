@@ -2,16 +2,18 @@
 function todomvc_the_list( $status = [ 'active', 'completed' ] ) {
 	$todos         = todomvc_get_todos( $status );
 	$all_completed = todomvc_get_all_completed( $todos );
+	$view          = 2 * in_array( 'active', $status ) + in_array( 'completed', $status );
 	?>
 	<section class="main">
 		<input class="toggle-all" type="checkbox"
 		       ic-put-to="/tasks?status-all=<?php echo $all_completed ? 'active' : 'completed' ?>"
-		       ic-target="#todo-list" <?php checked( $all_completed ) ?>>
+		       ic-target="#todo-list" <?php checked( $all_completed ) ?>
+			>
 		<label for="toggle-all">Mark all as complete</label>
 		<ul class="todo-list">
 			<?php foreach ( $todos as $todo ): ?>
 				<?php $class = $todo->post_status == 'active' ? '' : 'class = "completed"'; ?>
-				<li <?php echo $class ?>>
+				<li <?php echo $class ?> data-id="<?php echo $todo->ID ?>">
 					<div class="view">
 						<input class="toggle" type="checkbox"
 						       ic-put-to="/tasks/<?php echo $todo->ID ?>"
@@ -21,7 +23,8 @@ function todomvc_the_list( $status = [ 'active', 'completed' ] ) {
 						<button class="destroy" ic-delete-from="/tasks/<?php echo $todo->ID ?>"
 						        ic-target="#todo-list"></button>
 					</div>
-					<input class="edit" value="<?php echo $todo->post_title ?>">
+					<input class="edit" value="<?php echo $todo->post_title ?>"
+					       ic-put-to="/tasks/<?php echo $todo->ID ?>" name="new-task-title" ic-target="#todo-list">
 				</li>
 			<?php endforeach; ?>
 		</ul>
@@ -35,15 +38,15 @@ function todomvc_the_list( $status = [ 'active', 'completed' ] ) {
 			left</span>
 		<ul class="filters">
 			<li>
-				<a <?php echo $status == [ 'active', 'completed' ] || empty( $status ) ? 'class="selected"' : '' ?>
+				<a <?php echo $view == 3 ? 'class="selected"' : '' ?>
 					ic-get-from="/tasks" ic-target="#todo-list" href="#">All</a>
 			</li>
 			<li>
-				<a <?php echo $status == [ 'active' ] ? 'class="selected"' : '' ?> ic-get-from="/tasks?status=active"
-				                                                                   ic-target="#todo-list" href="#">Active</a>
+				<a <?php echo $view == 2 ? 'class="selected"' : '' ?> ic-get-from="/tasks?status=active"
+				                                                      ic-target="#todo-list" href="#">Active</a>
 			</li>
 			<li>
-				<a <?php echo $status == [ 'completed' ] ? 'class="selected"' : '' ?>
+				<a <?php echo $view == 1 ? 'class="selected"' : '' ?>
 					ic-get-from="/tasks?status=completed" ic-target="#todo-list" href="#">Completed</a>
 			</li>
 		</ul>

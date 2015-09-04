@@ -13,6 +13,13 @@ function todomvc_maybe_hide( $response ) {
 	}
 }
 
+/**
+ * @return mixed|void
+ */
+function todomvc_current_view() {
+	return get_option( 'todomvc_view_status', [ 'active', 'completed' ] );
+}
+
 add_action( 'wp-routes/register_routes', function () {
 	// All the tasks
 	respond( 'GET', '/tasks', function ( $request, $response ) {
@@ -23,6 +30,8 @@ add_action( 'wp-routes/register_routes', function () {
 		}
 
 		$status = array_intersect( $_REQUEST['status'], [ 'active', 'completed' ] );
+
+		update_option( 'todomvc_view_status', $status );
 
 		todomvc_the_list( $status );
 	} );
@@ -42,26 +51,39 @@ add_action( 'wp-routes/register_routes', function () {
 			return;
 		}
 		$response->header( 'X-IC-Trigger', 'todomvc/new-task-added' );
-		todomvc_the_list();
+
+
+		todomvc_the_list( todomvc_current_view() );
 	} );
 
-	// Change a todo status
+	// Change a todo status or title
 	respond( 'PUT', '/tasks/[i:id]', function ( $request ) {
 		if ( ! get_post( $request->id ) ) {
 			return;
 		}
+		parse_str( file_get_contents( 'php://input' ), $post_vars );
 		$post = get_post( $request->id );
 		if ( ! $post ) {
 			return;
 		}
-		$new_status = $post->post_status == 'completed' ? 'active' : 'completed';
-		$id         = wp_update_post( [ 'ID' => $request->id, 'post_status' => $new_status ] );
+		if ( isset( $post_vars['new-task-title'] ) ) {
+			if ( empty( $post_vars['new-task-title'] ) ) {
+				return;
+			}
+			$id = wp_update_post( [
+				'ID'         => $request->id,
+				'post_title' => filter_var( $post_vars['new-task-title'], FILTER_SANITIZE_STRING )
+			] );
+		} else {
+			$new_status = $post->post_status == 'completed' ? 'active' : 'completed';
+			$id         = wp_update_post( [ 'ID' => $request->id, 'post_status' => $new_status ] );
+		}
 		if ( $id === false ) {
 			return;
 		}
 
-		clean_post_cache( $request->ID );
-		todomvc_the_list();
+		clean_post_cache( $request->id );
+		todomvc_the_list( todomvc_current_view() );
 	} );
 
 	// Mark all
@@ -75,7 +97,7 @@ add_action( 'wp-routes/register_routes', function () {
 		if ( ! $ok ) {
 			return;
 		}
-		todomvc_the_list();
+		todomvc_the_list( todomvc_current_view() );
 	} );
 
 	// Delete a todo
@@ -88,9 +110,8 @@ add_action( 'wp-routes/register_routes', function () {
 			return;
 		}
 
-
 		todomvc_maybe_hide( $response );
-		todomvc_the_list();
+		todomvc_the_list( todomvc_current_view() );
 	} );
 
 	// Delete all tasks
@@ -109,6 +130,6 @@ add_action( 'wp-routes/register_routes', function () {
 		}
 
 		todomvc_maybe_hide( $response );
-		todomvc_the_list();
+		todomvc_the_list( todomvc_current_view() );
 	} );
 } );

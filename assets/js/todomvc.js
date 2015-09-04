@@ -11,5 +11,19 @@ jQuery( document ).ready( function ( $ ) {
 			$( '#todo-list' ).hide();
 		} );
 
+	$( 'ul.todo-list li label' ).on( 'dblclick', function () {
+		var $label = $( this ),
+			$li = $( this ).closest( 'li' ),
+			$input = $li.find( 'input.edit' ).first();
+		$li.addClass( 'editing' );
+		$input.focus();
+		$( document ).on( 'keyup', function ( e ) {
+			if ( e.keyCode === 27 ) {
+				$li.removeClass( 'editing' );
+				$input.val = $label.val();
+			}
+		} );
+	} );
+
 	Intercooler.defaultTransition( 'none' );
 } );

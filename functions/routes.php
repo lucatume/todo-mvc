@@ -23,6 +23,9 @@ function todomvc_current_view() {
 add_action( 'wp-routes/register_routes', function () {
 	// All the tasks
 	respond( 'GET', '/tasks', function ( $request, $response ) {
+		if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'todo-mvc' ) ) {
+			return;
+		}
 		if ( ! isset( $_REQUEST['status'] ) ) {
 			$_REQUEST['status'] = [ 'active', 'completed' ];
 		} else {
@@ -38,6 +41,9 @@ add_action( 'wp-routes/register_routes', function () {
 
 	// Add a new todo
 	respond( 'POST', '/tasks', function ( $request, $response ) {
+		if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'todo-mvc' ) ) {
+			return;
+		}
 		if ( empty( $_REQUEST['task-title'] ) ) {
 			return;
 		}
@@ -58,21 +64,24 @@ add_action( 'wp-routes/register_routes', function () {
 
 	// Change a todo status or title
 	respond( 'PUT', '/tasks/[i:id]', function ( $request ) {
+		parse_str( file_get_contents( 'php://input' ), $request_vars );
+		if ( ! wp_verify_nonce( $request_vars['_wpnonce'], 'todo-mvc' ) ) {
+			return;
+		}
 		if ( ! get_post( $request->id ) ) {
 			return;
 		}
-		parse_str( file_get_contents( 'php://input' ), $post_vars );
 		$post = get_post( $request->id );
 		if ( ! $post ) {
 			return;
 		}
-		if ( isset( $post_vars['new-task-title'] ) ) {
-			if ( empty( $post_vars['new-task-title'] ) ) {
+		if ( isset( $request_vars['new-task-title'] ) ) {
+			if ( empty( $request_vars['new-task-title'] ) ) {
 				return;
 			}
 			$id = wp_update_post( [
 				'ID'         => $request->id,
-				'post_title' => filter_var( $post_vars['new-task-title'], FILTER_SANITIZE_STRING )
+				'post_title' => filter_var( $request_vars['new-task-title'], FILTER_SANITIZE_STRING )
 			] );
 		} else {
 			$new_status = $post->post_status == 'completed' ? 'active' : 'completed';
@@ -88,6 +97,10 @@ add_action( 'wp-routes/register_routes', function () {
 
 	// Mark all
 	respond( 'PUT', '/tasks', function () {
+		parse_str( file_get_contents( 'php://input' ), $request_vars );
+		if ( ! wp_verify_nonce( $request_vars['_wpnonce'], 'todo-mvc' ) ) {
+			return;
+		}
 		if ( ! isset( $_REQUEST['status-all'] ) || ! in_array( $_REQUEST['status-all'], [ 'active', 'completed' ] ) ) {
 			return;
 		}
@@ -102,6 +115,10 @@ add_action( 'wp-routes/register_routes', function () {
 
 	// Delete a todo
 	respond( 'DELETE', '/tasks/[i:id]', function ( $request, $response ) {
+		parse_str( file_get_contents( 'php://input' ), $request_vars );
+		if ( ! wp_verify_nonce( $request_vars['_wpnonce'], 'todo-mvc' ) ) {
+			return;
+		}
 		if ( ! get_post( $request->id ) ) {
 			return;
 		}
@@ -116,6 +133,10 @@ add_action( 'wp-routes/register_routes', function () {
 
 	// Delete all tasks
 	respond( 'DELETE', '/tasks', function ( $request, $response ) {
+		parse_str( file_get_contents( 'php://input' ), $request_vars );
+		if ( ! wp_verify_nonce( $request_vars['_wpnonce'], 'todo-mvc' ) ) {
+			return;
+		}
 		$status = isset( $_REQUEST['status'] ) && in_array( $_REQUEST['status'], [ 'active', 'completed' ] );
 		if ( ! $status ) {
 			return;

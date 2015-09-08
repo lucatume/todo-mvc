@@ -25,5 +25,18 @@ jQuery( document ).ready( function ( $ ) {
 		} );
 	} );
 
+	$( 'section.todoapp' ).on( 'beforeSend.ic', function ( evt, elt, data, settings) {
+		var nonce = '&_wpnonce=' + $( '#_wpnonce' ).val()
+		switch ( settings.type ) {
+			case 'GET'    :
+				settings.url = settings.url + nonce;
+				break;
+			default :
+				settings.data = data + nonce;
+				data = data + nonce;
+				break;
+		}
+	} );
+
 	Intercooler.defaultTransition( 'none' );
 } );

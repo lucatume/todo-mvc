@@ -33,6 +33,7 @@
 				href="https://github.com/tastejs/todomvc/issues">let us know</a>.</em></footer>
 </aside>
 <section class="todoapp">
+	<?php wp_nonce_field( 'todo-mvc' ) ?>
 	<header class="header">
 		<h1>todos</h1>
 		<input class="new-todo" placeholder="What needs to be done?" autofocus="" ic-post-to="/tasks" name="task-title"

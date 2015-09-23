@@ -59,7 +59,7 @@ function todomvc_the_list( $status = [ 'active', 'completed' ] ) {
 }
 
 /**
- * @param $status
+ * @param array $status
  */
 function todomvc_get_display( $status = [ 'active', 'completed' ] ) {
 	$todos                                  = todomvc_get_todos( $status );

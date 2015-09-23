@@ -58,7 +58,6 @@ add_action( 'wp-routes/register_routes', function () {
 		}
 		$response->header( 'X-IC-Trigger', 'todomvc/new-task-added' );
 
-
 		todomvc_the_list( todomvc_current_view() );
 	} );
 

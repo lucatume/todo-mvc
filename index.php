@@ -32,14 +32,14 @@
 		<em>If you have other helpful links to share, or find any of the links above no longer work, please <a
 				href="https://github.com/tastejs/todomvc/issues">let us know</a>.</em></footer>
 </aside>
-<section class="todoapp">
+<section class="todoapp" ic-global-include="#_wpnonce">
 	<?php wp_nonce_field( 'todo-mvc' ) ?>
 	<header class="header">
 		<h1>todos</h1>
 		<input class="new-todo" placeholder="What needs to be done?" autofocus="" ic-post-to="/tasks" name="task-title"
 		       ic-target="#todo-list">
 	</header>
-	<div id="todo-list" <?php echo todomvc_get_display() ?>>
+	<div id="todo-list" <?php echo todomvc_get_display() ?> ic-transition-duration="0ms">
 		<?php todomvc_the_list() ?>
 	</div>
 </section>
